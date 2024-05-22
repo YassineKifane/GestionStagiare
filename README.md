@@ -54,6 +54,9 @@ REACT_APP_MEASUREMENT_ID=your_measurement_id
 REACT_APP_SOCKET_URL=socket_server_url
 ```
 
+NOTE:
+you can modify the APIs in the `src/services/`
+
 ### Socket
 
 In the `Socket` directory, create a `.env` file and add the following environment variable:
