@@ -68,7 +68,7 @@ CLIENT_BASE_URL=react_app_url
 
 ### Server
 
-In the `Server` directory, create a `config.env` file and add the following environment variables:
+In the `Server` directory, create a `.env` file and add the following environment variables:
 
 ```env
 DATABASE_URL=your_mongodb_connection_url
