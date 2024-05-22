@@ -97,21 +97,23 @@ npm start
 
 
 ## Features
+
 ### For Interns
-/
-    📊 **Dashboard:** Provides an overview of assigned tasks, received messages, and shared documents. Shows the number of to-do, in-progress, and completed tasks along with the completion rate.<br>
-    💬 **Real-Time Chat:** Instant communication with supervisors.<br>
-    📋 **Task Management:** Change task status via drag-and-drop, view task details, delete tasks, and copy task descriptions with a single click.<br>
-    📁 **Document Sharing:** Send and receive documents with supervisors, stored in Firebase.
+
+- 📊 **Dashboard:** Provides an overview of assigned tasks, received messages, and shared documents. Shows the number of to-do, in-progress, and completed tasks along with the completion rate.
+- 💬 **Real-Time Chat:** Instant communication with supervisors.
+- 📋 **Task Management:** Change task status via drag-and-drop, view task details, delete tasks, and copy task descriptions with a single click.
+- 📁 **Document Sharing:** Send and receive documents with supervisors, stored in Firebase.
 
 ### For Supervisors
-/
-    🔑 **Authentication Page:** Log in using pre-defined account information in the database.<br>
-    📊 **Supervision Dashboard:** Overview of intern activities, including tasks and shared documents.<br>
-    💬 **Communication with Interns:** Real-time chat, copy messages, view online interns, and view intern profiles.<br>
-    👥 **Intern Account Management:** Create, edit, and delete intern accounts. View detailed information about interns, including a pie chart showing task status percentages.<br>
-    📋 **Task Assignment:** Assign new tasks to interns with the title, description, and due date. Interns can update task completion status and details.<br>
-    📁 **Document Sharing:** Exchange documents with interns by entering the file title and uploading via a form or drag-and-drop. Documents are stored in Firebase.<br>
+
+- 🔑 **Authentication Page:** Log in using pre-defined account information in the database.
+- 📊 **Supervision Dashboard:** Overview of intern activities, including tasks and shared documents.
+- 💬 **Communication with Interns:** Real-time chat, copy messages, view online interns, and view intern profiles.
+- 👥 **Intern Account Management:** Create, edit, and delete intern accounts. View detailed information about interns, including a pie chart showing task status percentages.
+- 📋 **Task Assignment:** Assign new tasks to interns with the title, description, and due date. Interns can update task completion status and details.
+- 📁 **Document Sharing:** Exchange documents with interns by entering the file title and uploading via a form or drag-and-drop. Documents are stored in Firebase.
+
 
 ## Conclusion
 
