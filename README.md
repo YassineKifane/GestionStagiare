@@ -54,8 +54,11 @@ REACT_APP_MEASUREMENT_ID=your_measurement_id
 REACT_APP_SOCKET_URL=socket_server_url
 ```
 
-NOTE:
+NOTE:<br>
 you can modify the APIs in the `src/services/`
+<br>
+
+You can modify the logo by replacing `src/assets/images/logo-dark` , `src/assets/images/logo-light` and `src/assets/images/logo-sm` by your own logo.
 
 ### Socket
 
