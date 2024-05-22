@@ -51,7 +51,7 @@ const Chat = () => {
   const socketRef = useRef<any>(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:8800");
+    const newSocket = io(`${process.env.REACT_APP_SOCKET_URL}`);
     socketRef.current = newSocket;
     setSocket(newSocket);
 

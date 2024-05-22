@@ -1,7 +1,10 @@
-const io = require('socket.io')(8800,{
+const dotenv = require('dotenv');
+dotenv.config({ path: "./.env" });
+
+const io = require('socket.io')(process.env.SOCKET_PORT,{
     pingTimeout:60000,
     cors:{
-        origin:["http://localhost:3000"],
+        origin:[process.env.CLIENT_BASE_URL],
         methods:["GET","POST"]
     }
 });
