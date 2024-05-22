@@ -13,7 +13,7 @@ const auth = require('./middlewares/Auth');
 
 // Load environment variables
 const dotenv = require('dotenv');
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./.env" });
 
 
 

@@ -57,15 +57,69 @@ REACT_APP_SOCKET_URL=socket_server_url
 ### Socket
 
 In the `Socket` directory, create a `.env` file and add the following environment variable:
+
+```env
 SOCKET_PORT=your_socket_port
 CLIENT_BASE_URL=react_app_url
+```
 
 ### Server
 
 In the `Server` directory, create a `config.env` file and add the following environment variables:
 
+```env
 DATABASE_URL=your_mongodb_connection_url
 MY_SECRET=random_password_for_jwt_token
 PORT=server_port_number
+```
+
+## Running the Application
+
+1. Start the backend server:
+```
+cd Server
+npm start
+```
+
+2. Start the Socket.io server:
+```
+cd Socket
+npm start
+```
 
 
+3. Start the frontend client:
+```
+cd Client
+npm start
+```
+
+
+
+## Features
+### For Interns
+
+    📊 `Dashboard:` Provides an overview of assigned tasks, received messages, and shared documents. Shows the number of to-do, in-progress, and completed tasks along with the completion rate.
+    💬 `Real-Time Chat:` Instant communication with supervisors.
+    📋 `Task Management:` Change task status via drag-and-drop, view task details, delete tasks, and copy task descriptions with a single click.
+    📁 `Document Sharing:` Send and receive documents with supervisors, stored in Firebase.
+
+### For Supervisors
+
+    🔑 `Authentication Page:` Log in using pre-defined account information in the database.
+    📊 `Supervision Dashboard:` Overview of intern activities, including tasks and shared documents.
+    💬 `Communication with Interns:` Real-time chat, copy messages, view online interns, and view intern profiles.
+    👥 `Intern Account Management:` Create, edit, and delete intern accounts. View detailed information about interns, including a pie chart showing task status percentages.
+    📋 `Task Assignment:` Assign new tasks to interns with the title, description, and due date. Interns can update task completion status and details.
+    📁 `Document Sharing:` Exchange documents with interns by entering the file title and uploading via a form or drag-and-drop. Documents are stored in Firebase.
+
+## Conclusion
+
+This application aims to optimize internship management processes at OCP by providing a centralized platform for communication, task management, and document sharing. The technology stack ensures a smooth and responsive user experience.
+Author
+
+    SALAMA ANAS.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
