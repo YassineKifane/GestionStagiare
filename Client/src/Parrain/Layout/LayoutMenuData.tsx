@@ -1,4 +1,4 @@
-import {Globe,  CircuitBoard,  MessageSquare, MonitorDot } from "lucide-react";
+import {Globe,  CircuitBoard,  MessageSquare, MonitorDot,FileStack } from "lucide-react";
 
 const menuData: any = [
     {
@@ -43,6 +43,13 @@ const menuData: any = [
         // ],
     },
     
+    // {
+    //     id: 'CV-thèque',
+    //     label: 'CVthèque',
+    //     icon: <FileStack />,
+    //     link: '/cv-thèque',
+    //     parentId: 3,
+    // },
   
     {
         id: 'contact',

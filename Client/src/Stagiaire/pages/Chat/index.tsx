@@ -223,7 +223,7 @@ const Chat = () => {
     setChat_Box_Username(intern.fname);
     setChat_Box_Image(ParrainImage);
     setChat_Box_Desiganation(intern.speciality);
-    setCurrentRoomId(item._id);
+    setCurrentRoomId(item.id);
     setcurrentParrain(intern);
 
     if (latestMessages) {
@@ -239,7 +239,7 @@ const Chat = () => {
       setDisplayMessages(messages);
     }
 
-    // dispatch(onGetChat(item._id));
+    // dispatch(onGetChat(item.id));
 
     document.querySelector(".menu-content")?.classList.add("hidden");
     document.querySelector(".chat-content")?.classList.add("show");

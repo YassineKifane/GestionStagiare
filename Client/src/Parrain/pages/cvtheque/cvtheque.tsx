@@ -36,7 +36,7 @@ import { ToastContainer } from "react-toastify";
 
 import getToken from "helpers/jwt-token-access/tokenAccess";
 
-const EmployeeList = () => {
+const Cvtheque = () => {
   const [eventData, setEventData] = useState<any>();
 
   const [show, setShow] = useState<boolean>(false);
@@ -476,42 +476,17 @@ const EmployeeList = () => {
         accessorKey: "age",
         enableColumnFilter: false,
       },
+
+
       {
-        header: "Etablissement",
-        accessorKey: "etablissement",
+        header: "Cv",
+        accessorKey: "Cv",
         enableColumnFilter: false,
       },
 
-      {
-        header: "Stage Duration",
-        accessorKey: "StageDuration",
-        enableColumnFilter: false,
-      },
 
       {
-        header: "Joining Date",
-        accessorKey: "joinDate",
-        enableColumnFilter: false,
-        cell: (cell: any) => (
-          <h6 className="text-slate-600 dark:text-zink-100">
-            {formatDueDate(cell.getValue())}
-          </h6>
-        ),
-      },
-
-      {
-        header: "End Date",
-        accessorKey: "EndDate",
-        enableColumnFilter: false,
-        cell: (cell: any) => (
-          <h6 className="text-slate-600 dark:text-zink-100">
-            {formatDueDate(cell.getValue())}
-          </h6>
-        ),
-      },
-
-      {
-        header: "Action",
+        header: "View CV",
         enableColumnFilter: false,
         enableSorting: true,
         cell: (cell: any) => (
@@ -522,28 +497,7 @@ const EmployeeList = () => {
             >
               <Eye className="inline-block size-3" />{" "}
             </Link>
-            <Link
-              to="#!"
-              data-modal-target="addEmployeeModal"
-              className="flex items-center justify-center size-8 transition-all duration-200 ease-linear rounded-md edit-item-btn bg-slate-100 text-slate-500 hover:text-custom-500 hover:bg-custom-100 dark:bg-zink-600 dark:text-zink-200 dark:hover:bg-custom-500/20 dark:hover:text-custom-500"
-              onClick={() => {
-                const data = cell.row.original;
-                data.img = imageUrls[cell.row.original.internId];
-                handleUpdateDataClick(data);
-              }}
-            >
-              <Pencil className="size-4" />
-            </Link>
-            <Link
-              to="#!"
-              className="flex items-center justify-center size-8 transition-all duration-200 ease-linear rounded-md remove-item-btn bg-slate-100 text-slate-500 hover:text-custom-500 hover:bg-custom-100 dark:bg-zink-600 dark:text-zink-200 dark:hover:bg-custom-500/20 dark:hover:text-custom-500"
-              onClick={() => {
-                const data = cell.row.original;
-                onClickDelete(data);
-              }}
-            >
-              <Trash2 className="size-4" />
-            </Link>
+
           </div>
         ),
       },
@@ -827,62 +781,6 @@ const EmployeeList = () => {
 
               <div className="xl:col-span-6">
                 <label
-                  htmlFor="joinDate"
-                  className="inline-block mb-2 text-base font-medium"
-                >
-                  Joining Date
-                </label>
-                <Flatpickr
-                  id="joinDate"
-                  className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                  options={{
-                    dateFormat: "d M, Y",
-                  }}
-                  placeholder="Select date"
-                  name="joinDate"
-                  onChange={(date: any) =>
-                    validation.setFieldValue(
-                      "joinDate",
-                      moment(date[0]).format("DD MMMM ,YYYY")
-                    )
-                  }
-                  value={validation.values.joinDate || ""}
-                />
-                {validation.touched.joinDate && validation.errors.joinDate ? (
-                  <p className="text-red-400">{validation.errors.joinDate}</p>
-                ) : null}
-              </div>
-
-              <div className="xl:col-span-6">
-                <label
-                  htmlFor="EndDate"
-                  className="inline-block mb-2 text-base font-medium"
-                >
-                  End Date
-                </label>
-                <Flatpickr
-                  id="EndDate"
-                  className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
-                  options={{
-                    dateFormat: "d M, Y",
-                  }}
-                  placeholder="Select date"
-                  name="EndDate"
-                  onChange={(date: any) =>
-                    validation.setFieldValue(
-                      "EndDate",
-                      moment(date[0]).format("DD MMMM ,YYYY")
-                    )
-                  }
-                  value={validation.values.EndDate || ""}
-                />
-                {validation.touched.EndDate && validation.errors.EndDate ? (
-                  <p className="text-red-400">{validation.errors.EndDate}</p>
-                ) : null}
-              </div>
-
-              <div className="xl:col-span-6">
-                <label
                   htmlFor="age"
                   className="inline-block mb-2 text-base font-medium"
                 >
@@ -1014,4 +912,4 @@ const EmployeeList = () => {
   );
 };
 
-export default EmployeeList;
+export default Cvtheque;

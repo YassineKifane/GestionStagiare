@@ -1,154 +1,128 @@
 const Task = require('../models/TaskModel');
 const Intern = require('../models/StagiaireModel');
 
-
-// create a function to get tasks by intern id:
+// Function to get tasks by intern id
 exports.getTasksByInternId = async (req, res) => {
     try {
-        const tasks = await Task.find({ internId: req.params.internId });
+        const tasks = await Task.findAll({ where: { internId: req.params.internId } });
         res.status(200).json({ tasks });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-// create a function to create a task:
+// Function to create a task
 exports.createTask = async (req, res) => {
     try {
-        const task = new Task(req.body);
-        await task.save();
+        const task = await Task.create(req.body);
         res.status(201).json({ task });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-// create a function to delete a task by id:
+// Function to delete a task by id
 exports.deleteTaskById = async (req, res) => {
     try {
-        const task = await Task.findByIdAndDelete(req.params.taskId);
+        console.log(`Attempting to delete Task with ID: ${req.params.taskId}`);
+        const task = await Task.destroy({ where: { id: req.params.taskId } });
         res.status(200).json({ task });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-// create a function to update a task by id:
+
+// Function to update a task by id
 exports.updateTaskById = async (req, res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params.taskId, req.body, { new: true });
-        res.status(200).json({ task });
+        const task = await Task.update(req.body, { where: { id: req.params.taskId }, returning: true });
+        res.status(200).json({ task: task[1][0] }); // Sequelize returns an array, updated instance is at index 1
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-// create a function to delete all tasks by internId:
+// Function to delete all tasks by internId
 exports.deleteAllTasksByInternId = async (req, res) => {
     try {
-        const tasks = await Task.deleteMany({ internId: req.params.internId });
+        const tasks = await Task.destroy({ where: { internId: req.params.internId } });
         res.status(200).json({ tasks });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-// create a function to update a task statut by id
+// Function to update a task statut by id
 exports.updateTaskStatutById = async (req, res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params.taskId, { statut: req.body.statut }, { new: true });
-        res.status(200).json({ task });
+        const task = await Task.update({ statut: req.body.statut }, { where: { id: req.params.taskId }, returning: true });
+        res.status(200).json({ task: task[1][0] });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-// create a function to update a task completionPercentage by id
+// Function to update a task completionPercentage by id
 exports.updateTaskCompletionPercentageById = async (req, res) => {
     try {
-        const task = await Task.findByIdAndUpdate(req.params.taskId, { completionPercentage: req.body.completionPercentage }, { new: true });
-        res.status(200).json({ task });
+        const task = await Task.update({ completionPercentage: req.body.completionPercentage }, { where: { id: req.params.taskId }, returning: true });
+        res.status(200).json({ task: task[1][0] });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-
-
-
-
-// exports.getNumberOfTasksByStatut = async (req, res) => {
-//     try {
-//         const { internId, statut } = req.params;
-//         const tasks = await Task.find({ internId, statut });
-//         const numberOfTasks = tasks.length; // Get the number of tasks
-//         res.status(200).json({ numberOfTasks });
-//     } catch (error) {
-//         res.status(500).json({ msg: error });
-//     }
-// }
-
-
-
+// Function to get the number of tasks by status
 exports.getNumberOfTasksByStatus = async (req, res) => {
     try {
         const { internId } = req.params;
-        const statuses = ['todo', 'enCours', 'termine']; // Define the statuses
-        const numberOfTasksByStatus = {}; // Object to store the number of tasks for each status
+        const statuses = ['todo', 'enCours', 'termine'];
+        const numberOfTasksByStatus = {};
 
-        // Loop through each status
         for (const status of statuses) {
-            const tasks = await Task.find({ internId, statut: status });
-            const numberOfTasks = tasks.length;
-            numberOfTasksByStatus[status] = numberOfTasks; // Store the number of tasks for the current status
+            const count = await Task.count({ where: { internId, statut: status } });
+            numberOfTasksByStatus[status] = count;
         }
 
         res.status(200).json({ numberOfTasksByStatus });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-// function to get the percentage of each status
+// Function to get the percentage of each status
 exports.getPercentageOfStatus = async (req, res) => {
     try {
         const { internId } = req.params;
-        const statuses = ['todo', 'enCours', 'termine']; // Define the statuses
-        const numberOfTasksByStatus = {}; // Object to store the number of tasks for each status
+        const statuses = ['todo', 'enCours', 'termine'];
+        const numberOfTasksByStatus = {};
 
-        // Loop through each status
         for (const status of statuses) {
-            const tasks = await Task.find({ internId, statut: status });
-            const numberOfTasks = tasks.length;
-            numberOfTasksByStatus[status] = numberOfTasks; // Store the number of tasks for the current status
+            const count = await Task.count({ where: { internId, statut: status } });
+            numberOfTasksByStatus[status] = count;
         }
 
-        const totalTasks = Object.values(numberOfTasksByStatus).reduce((a, b) => a + b, 0); // Calculate the total number of tasks
-        const percentageOfStatus = {}; // Object to store the percentage of tasks for each status
+        const totalTasks = Object.values(numberOfTasksByStatus).reduce((a, b) => a + b, 0);
+        const percentageOfStatus = {};
 
-        // Loop through each status and calculate the percentage
         for (const status of statuses) {
             const numberOfTasks = numberOfTasksByStatus[status];
             const percentage = (numberOfTasks / totalTasks) * 100;
-            percentageOfStatus[status] = percentage; // Store the percentage of tasks for the current status
+            percentageOfStatus[status] = percentage;
         }
-        res.status(200).json( percentageOfStatus);
-}
-    catch (error) {
+
+        res.status(200).json(percentageOfStatus);
+    } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-// a function to get the percentage of completion of all tasks of an intern
+// Function to get the percentage of completion of all tasks of an intern
 exports.getPercentageOfCompletionOfTasksById = async (req, res) => {
     try {
         const { internId } = req.params;
-        const tasks = await Task.find({ internId });
+        const tasks = await Task.findAll({ where: { internId } });
         const numberOfTasks = tasks.length;
         const completedTasks = tasks.filter(task => task.statut === 'termine').length;
         const percentageOfCompletion = (completedTasks / numberOfTasks) * 100;
@@ -156,13 +130,12 @@ exports.getPercentageOfCompletionOfTasksById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
+// Function to get the percentage of completion of all tasks
 exports.getPercentageOfCompletionOfAllTasks = async (req, res) => {
     try {
-        
-        const tasks = await Task.find({});
+        const tasks = await Task.findAll({});
         const numberOfTasks = tasks.length;
         const completedTasks = tasks.filter(task => task.statut === 'termine').length;
         const percentageOfCompletion = (completedTasks / numberOfTasks) * 100;
@@ -170,40 +143,17 @@ exports.getPercentageOfCompletionOfAllTasks = async (req, res) => {
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
 
-
-
-
-
-
-
-
-
-
-// function to get the number of all tasks of an intern that has the parrainId from the request param
+// Function to get the number of all tasks of an intern that has the parrainId from the request param
 exports.getNumberOfAllTasks = async (req, res) => {
     try {
-        console.log(req.params.parrainId);
-        // Fetch all tasks
-        const tasks = await Task.find();
+        const tasks = await Task.findAll({});
+        const numberOfTasks = tasks.length;
         
-        
-        let numberOfTasks = 0;
-
-        // Iterate through each task
-        for (const task of tasks) {
-            // Fetch the intern associated with the task
-            const intern = await Intern.findOne({ internId: task.internId });
-            
-            // Check if the intern exists and has the provided parrainId
-            if (intern && intern.parrainId === req.params.parrainId) {
-                numberOfTasks++;
-            }
-        }
-
         res.status(200).json(numberOfTasks);
     } catch (error) {
         res.status(500).json({ msg: error });
     }
-}
+};
+

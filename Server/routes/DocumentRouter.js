@@ -6,6 +6,7 @@ router.post('/add', DocumentController.createDocument);
 // router.get('/get/sender/:senderId', DocumentController.getAllDocumentsBySenderId);
 // router.get('/get/receiver/:receiverId', DocumentController.getAllDocumentsByReceiverId);
 router.delete('/delete/:id', DocumentController.deleteDocumentById);
+router.get('/document/:id', DocumentController.getDocumentById);
 
 router.get('/get/sender/:senderId/receiver/:receiverId', DocumentController.getAllDocumentsBySenderAndReceiverId);
 

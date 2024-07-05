@@ -162,7 +162,7 @@ const ProjectsTabs = (props: any) => {
     onSubmit: async (values) => {
       if (isEdit) {
         const updateTask = {
-          id: eventData ? eventData._id : 0,
+          id: eventData ? eventData.id : 0,
           ...values,
         };
 
@@ -287,14 +287,14 @@ const ProjectsTabs = (props: any) => {
       <div className="grid grid-cols-1 gap-x-5 md:grid-cols-2 2xl:grid-cols-4">
         {tasks &&
           tasks.map((task) => (
-            <div key={task._id} className="card relative">
+            <div key={task.id} className="card relative">
               <div className="card-body">
                 <div className="flex justify-between">
                   <div className="absolute right-5">
                     <Dropdown className="relative">
                       <Dropdown.Trigger
                         className="flex items-center justify-center size-[37.5px] dropdown-toggle p-0 text-slate-500 btn bg-slate-200 border-slate-200 hover:text-slate-600 hover:bg-slate-300 hover:border-slate-300 focus:text-slate-600 focus:bg-slate-300 focus:border-slate-300 focus:ring focus:ring-slate-100 active:text-slate-600 active:bg-slate-300 active:border-slate-300 active:ring active:ring-slate-100 dark:bg-zink-600 dark:hover:bg-zink-500 dark:border-zink-600 dark:hover:border-zink-500 dark:text-zink-200 dark:ring-zink-400/50"
-                        id={`projectDropdownmenu${task._id}`}
+                        id={`projectDropdownmenu${task.id}`}
                         data-bs-toggle="dropdown"
                       >
                         <MoreHorizontal className="size-4"></MoreHorizontal>
@@ -302,7 +302,7 @@ const ProjectsTabs = (props: any) => {
                       <Dropdown.Content
                         placement="right-end"
                         className="absolute z-50 py-2 mt-1 text-left list-none bg-white rounded-md shadow-md dropdown-menu min-w-[10rem]"
-                        aria-labelledby={`projectDropdownmenu${task._id}`}
+                        aria-labelledby={`projectDropdownmenu${task.id}`}
                       >
                         <li>
                           <a
@@ -321,7 +321,7 @@ const ProjectsTabs = (props: any) => {
                             className="block px-4 py-1.5 text-base transition-all duration-200 ease-linear bg-white text-slate-600 dropdown-item hover:bg-slate-100 hover:text-slate-500 focus:bg-slate-100 focus:text-slate-500"
                             href="#!"
                             onClick={() => {
-                              onClickDelete(task._id);
+                              onClickDelete(task.id);
                             }}
                           >
                             <Trash2 className="inline-block size-3 mr-1"></Trash2>{" "}

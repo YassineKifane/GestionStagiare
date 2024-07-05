@@ -1,91 +1,75 @@
-const mongoose = require('mongoose');
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const StagiaireSchema = new mongoose.Schema({
+const Stagiaire = sequelize.define('Stagiaire', {
     internId: {
-        type: String,
-        unique:true,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        primaryKey: true
     },
     fname: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
     lname: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
     email: {
-        type: String,
-        required: [true, 'Please provide your email'],
+        type: DataTypes.STRING,
+        allowNull: false,
         unique: true,
+        validate: {
+            isEmail: true
+        }
     },
     password: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    phone:{
-        type: String,
-        required: true
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    StageDuration:{
-        type: String,
-        required: true
+    StageDuration: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    joinDate:{
-        type: Date,
-        required: true
+    joinDate: {
+        type: DataTypes.DATE,
+        allowNull: false
     },
-    EndDate:{
-        type: Date,
-        required: true
+    EndDate: {
+        type: DataTypes.DATE,
+        allowNull: false
     },
-
-    age:{
-        type: Number,
-        required: true
+    age: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
-
-    etablissement:{
-        type: String,
-        required: true
+    etablissement: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-
-    service:{
-        type: String,
-        required: true
+    service: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-
-    speciality:{
-        type: String,
-        required: true
+    speciality: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-
     parrainId: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
     img: {
-        type: String,
-        default: 'default.jpg'
-    },
+        type: DataTypes.STRING,
+        defaultValue: 'default.jpg'
+    }
+}, {
+    timestamps: false
+});
 
-    // created_at: Date,
-
-})
-
-
-    
-
-// StagiaireSchema.pre('save', async function (next) {
-//     if (!this.isModified('password')) return next();
-
-//     // Hash the password with cost of 12
-//     this.password = await bcrypt.hash(this.password, 12);
-
-// });
-
-
-const Stagiaire = mongoose.model('Stagiaire', StagiaireSchema);
 module.exports = Stagiaire;

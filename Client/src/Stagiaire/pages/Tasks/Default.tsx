@@ -79,7 +79,7 @@ const DefaultCalendar = () => {
     onSubmit: async (values) => {
       if (isEdit) {
         const updateTask = {
-          id: eventData ? eventData._id : 0,
+          id: eventData ? eventData.id : 0,
           ...values,
         };
 

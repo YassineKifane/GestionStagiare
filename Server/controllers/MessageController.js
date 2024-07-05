@@ -1,39 +1,37 @@
 const MessageModel = require('../models/MessageModel');
 
+// Function to add a message
 exports.addMessage = async (req, res) => {
   const { chatId, senderId, text } = req.body;
-  const message = new MessageModel({ chatId, senderId, text });
   try {
-    const result = await message.save();
-    res.status(200).json(result);
+    const message = await MessageModel.create({ chatId, senderId, text });
+    res.status(200).json(message);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-
+// Function to get messages by chatId
 exports.getMessages = async (req, res) => {
   const { chatId } = req.params;
   try {
-    const result = await MessageModel.find({ chatId });
-    res.status(200).json(result);
+    const messages = await MessageModel.findAll({ where: { chatId } });
+    res.status(200).json(messages);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-
-// fonction to get latest message (use chatModel and MessageModel)
-
+// Function to get the latest message by chatId
 exports.getLatestMessage = async (req, res) => {
   const { chatId } = req.params;
-  const latestMessage = await MessageModel.find({ chatId: chatId }).sort({ createdAt: -1 }).limit(1);
-  res.status(200).json(latestMessage)
-}
-
-
-// function to count received messages based on a given user id (use chatModel and MessageModel)
-
-
-
-
+  try {
+    const latestMessage = await MessageModel.findOne({
+      where: { chatId },
+      order: [['createdAt', 'DESC']],
+    });
+    res.status(200).json(latestMessage);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};

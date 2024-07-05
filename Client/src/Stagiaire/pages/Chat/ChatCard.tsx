@@ -44,7 +44,7 @@ function ChatCard({item, Chat_Box_Username, userChatOpen, internId, parrainId, P
                 throw new Error('Failed to fetch messages');
             }
             const data = await response.json();
-            if (data.length > 0) {
+            if (data?.length > 0) {
                
                 setLatestMessage(data[0]);
             } else {
@@ -86,14 +86,14 @@ const fetchMessages = async (chatId:any) => {
     useEffect(() => {
       
         getParrainById(parrainId);
-        getLatestMessage(item._id);
-        fetchMessages(item._id);
+        getLatestMessage(item.id);
+        fetchMessages(item.id);
 
     }, [parrainId]);
 
 
     useEffect(()=>{
-      if(ReceiveMessage!==null && ReceiveMessage.chatId===item._id){
+      if(ReceiveMessage!==null && ReceiveMessage.chatId===item.id){
           setLatestMessage(ReceiveMessage);
           setLatestMessages([...latestMessages, ReceiveMessage]);
           

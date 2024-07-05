@@ -11,6 +11,8 @@ import EmployeeList from "Parrain/pages/StagiaireManagement/InternsList";
 import LoginBoxed from "Parrain/pages/AuthenticationInner/Login/LoginBoxed";
 // Logout
 
+//CV THEQUE
+import cvtheque from "Parrain/pages/cvtheque/cvtheque"
 
 
 import Login from "Parrain/pages/Authentication/Login";
@@ -36,6 +38,7 @@ const authProtectedRoutes: Array<RouteObject> = [
   { path: "/pages-account", component: Account },
   { path: "/pages-account-settings", component: Settings },
   { path: "/user-profile", component: UserProfile },
+  { path: "/cv-thèque", component: cvtheque  },
 ];
 
 const publicRoutes = [

@@ -82,7 +82,7 @@ const Section = ({fetchTasksData,statut, inProgress, CompleteTasks, setCompleteT
         }
     
         console.log(item);
-        console.log("dropped ", item._id);
+        console.log("dropped ", item.id);
         console.log("from : ", item.statut);
         console.log("to statut ", statut);
     
@@ -93,13 +93,13 @@ const Section = ({fetchTasksData,statut, inProgress, CompleteTasks, setCompleteT
             // Update the local state based on the dropped item
             switch (item.statut) {
                 case "todo":
-                    setTodoTasks((prevTasks: any) => prevTasks.filter((task: any) => task._id !== item._id));
+                    setTodoTasks((prevTasks: any) => prevTasks.filter((task: any) => task.id !== item.id));
                     break;
                 case "termine":
-                    setCompleteTasks((prevTasks: any) => prevTasks.filter((task: any) => task._id !== item._id));
+                    setCompleteTasks((prevTasks: any) => prevTasks.filter((task: any) => task.id !== item.id));
                     break;
                 case "enCours":
-                    setInProgressTasks((prevTasks: any) => prevTasks.filter((task: any) => task._id !== item._id));
+                    setInProgressTasks((prevTasks: any) => prevTasks.filter((task: any) => task.id !== item.id));
                     break;
                 default:
                     break;
@@ -120,7 +120,7 @@ const Section = ({fetchTasksData,statut, inProgress, CompleteTasks, setCompleteT
             }
     
             // Update the database
-            await updateTaskById(item._id, statut);
+            await updateTaskById(item.id, statut);
         } catch (error) {
             console.error('Error updating task in the database:', error);
         }
@@ -176,7 +176,7 @@ const Section = ({fetchTasksData,statut, inProgress, CompleteTasks, setCompleteT
             <Header text={text} bg={bg} count={tasksToMap.length}/>
             {tasksToMap.length > 0 && tasksToMap.map((task:any, index:any)=>(
                 
-                <Task key={task._id} task={task} setCompleteTasks={setCompleteTasks} setInProgressTasks={setInProgressTasks} inProgress={inProgress} completed={CompleteTasks} fetchTasksData={fetchTasksData}  isEditClicked={isEditClicked}/>
+                <Task key={task.id} task={task} setCompleteTasks={setCompleteTasks} setInProgressTasks={setInProgressTasks} inProgress={inProgress} completed={CompleteTasks} fetchTasksData={fetchTasksData}  isEditClicked={isEditClicked}/>
             ))}
         </div>
     )
@@ -250,7 +250,7 @@ const Task = ({ task, setCompleteTasks, setInProgressTasks, inProgress, complete
                 }
                 
                 // save new percentage
-                dispatch(updateTaskPercentageById(task._id,values));
+                dispatch(updateTaskPercentageById(task.id,values));
             }
             toggle();
         },
@@ -375,8 +375,8 @@ const Task = ({ task, setCompleteTasks, setInProgressTasks, inProgress, complete
                <p>{task.title}</p>
                
                {isEditClicked ? 
-               <button className="absolute bottom-3 right-2" onClick={()=>deleteTaskById(task._id)}> <Trash2 className="w-5" /> </button>
-               :<button className="absolute bottom-3 right-2" onClick={()=>handleViewClick(task._id)}>  <Eye className="w-5" /></button>}
+               <button className="absolute bottom-3 right-2" onClick={()=>deleteTaskById(task.id)}> <Trash2 className="w-5" /> </button>
+               :<button className="absolute bottom-3 right-2" onClick={()=>handleViewClick(task.id)}>  <Eye className="w-5" /></button>}
                
                
 

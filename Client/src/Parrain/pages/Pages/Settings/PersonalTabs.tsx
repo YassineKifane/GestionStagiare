@@ -143,10 +143,11 @@ const PersonalTabs = () => {
                     toast.error("Error updating your informations", { autoClose: 2000 });
                 }
                 toast.success("your informations updated successfully", { autoClose: 2000 });
-                console.log("imageChanged")
-                console.log(imageChanged)
+                
                 if(imageChanged){
                      updateImageByUserId(parrainInfo.parrainId);
+                     console.log("imageChanged")
+                     console.log(imageChanged)
                 }else{
                     setInterval(async () => {
                     window.location.href='/logout';

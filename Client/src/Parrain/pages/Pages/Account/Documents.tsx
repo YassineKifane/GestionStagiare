@@ -1,20 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ArrowDownToLine, ChevronLeft, ChevronRight, Eye, FileEdit, Trash2, UploadCloud } from "lucide-react";
 import Modal from 'Common/Components/Modal';
-// Formik
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from 'react-toastify';
 import { toast } from "react-toastify";
 import DeleteModal from 'Common/DeleteModal';
-import Flatpickr from "react-flatpickr";
-import moment from "moment";
 import Dropzone from "react-dropzone";
-import {storage} from "helpers/firebaseConfig";
-import { ref, getDownloadURL, uploadBytesResumable, deleteObject, UploadTaskSnapshot } from "firebase/storage";
+import { storage } from "helpers/firebaseConfig";
+import { ref, getDownloadURL, uploadBytesResumable, UploadTaskSnapshot } from "firebase/storage";
 import getToken from "helpers/jwt-token-access/tokenAccess";
-import {ADD_DOCUMENT, DELETE_DOCUMENT} from "services/documentsAPIs/documentsAPIs"
+import { ADD_DOCUMENT, DELETE_DOCUMENT } from "services/documentsAPIs/documentsAPIs";
 
 
 
@@ -61,71 +57,63 @@ const validation: any = useFormik({
 
     initialValues: {
         fileName: (eventData && eventData.fileName) || '',
-       
+        documentType: (eventData && eventData.documentType) || '',
     },
     validationSchema: Yup.object({
         
         fileName: Yup.string().required("Please Enter Title"),
-       
+        documentType: Yup.string().required('Document Type is required'),
        
 
     }),
 
 
-    onSubmit: async(values) => {
-       
-            // Upload the file to Firebase
-            let document = await uploadFileToFirebase(selectedFiles[0]);
-            if(document==null){
-                document=''
-            }
-           // the url and fileSize, fileType is undifined please solve it
-            const newData = {
-                ...values,
-                url: document,
-                fileSize: selectedFiles[0].formattedSize,
-                fileType: selectedFiles[0].type,
-                sender: parrainId,
-                receiver: internId,  
-              
-            };
+    onSubmit: async (values) => {
+        // Upload the file to Firebase
+        let document = await uploadFileToFirebase(selectedFiles[0]);
+        if (document == null) {
+            document = '';
+        }
+        // the url and fileSize, fileType is undefined please solve it
+        const newData = {
+            ...values,
+            url: document,
+            fileSize: selectedFiles[0]?.formattedSize,
+            fileType: selectedFiles[0]?.type,
+            documentType: values.documentType,
+            sender: parrainId,
+            receiver: internId,
+        };
+
+        // save new user
+        try {
+            console.log("form data :");
             console.log(newData);
-            // save new user
-            try {
-                console.log("form data :");
-                console.log(newData);
-                const response = await fetch(`${ADD_DOCUMENT}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': `Bearer ${getToken()}`, // Include the token in the Authorization header
-                    
-                    },
-                    body: JSON.stringify(newData),
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  
-                }
-                const data = await response.json();
-                console.log(data);
-                // handle successful response
-                toast.success("Document Added Successfully", { autoClose: 3000 });
-
-                setInterval(async () => {
-                   
-                  await getAllDocumentsSended(parrainId,internId);
-                  
-                  }, 1000);
-
-            } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-                toast.error("Document Added Failed", { autoClose: 2000 });
-                // handle error
+            const response = await fetch(`${ADD_DOCUMENT}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${getToken()}`, // Include the token in the Authorization header
+                },
+                body: JSON.stringify(newData),
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-          
-
-      
+            const data = await response.json();
+            console.log(data);
+            // handle successful response
+            toast.success("Document Added Successfully", { autoClose: 3000 });
+    
+            // Call the function once after successfully adding the document
+            await getAllDocumentsSended(parrainId, internId);
+    
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            toast.error("Document Added Failed", { autoClose: 2000 });
+            // handle error
+        }
+    
         toggle();
     },
 });
@@ -150,9 +138,9 @@ const handleAcceptedFiles = async (files: any) => {
     
     setSelectedFiles([updatedFile]);
     
-
+    
    
-}
+};
 
 
 
@@ -196,10 +184,6 @@ const uploadFileToFirebase = async (updatedFile: File) => {
 
 
 
-
-
-
-
 const toggle = useCallback(() => {
     if (show) {
         setShow(false);
@@ -212,16 +196,16 @@ const toggle = useCallback(() => {
     }
 }, [show, validation]);
 
+
 const handleDelete = () => {
     if (eventData) {
-        // deleteTaskById(taskId);
+        console.log('Event Data before deletion:', eventData);
+        handleDocDeletion(eventData.id, eventData.ismine);
         setDeleteModal(false);
-        
+    } else {
+        console.error('Event Data is not defined');
     }
 };
-
-
-
 
 
     const formatBytes = (bytes: any, decimals = 2) => {
@@ -243,42 +227,30 @@ const handleDelete = () => {
     };
     
 
-    const handleDocDeletion=async(id:any, ismine:boolean)=>{
+    const handleDocDeletion = async (id:any, ismine:boolean) => {
+        console.log('Received document ID:', id);
         try {
-            
-          
-          const response = await fetch(`${DELETE_DOCUMENT+id}`, {
+          const response = await fetch(`${DELETE_DOCUMENT}${id}`, {
             method: 'DELETE',
             headers: {
-                'authorization': `Bearer ${getToken()}`, // Include the token in the Authorization header
+              'authorization': `Bearer ${getToken()}`,
             },
           });
-          if (!response.ok) {
-            toast.error("Error deleting Document", { autoClose: 2000 });
+          if (response.ok) {
+            toast.success("Document deleted successfully", { autoClose: 2000 });
+            if (ismine) {
+              await getAllDocumentsSended(parrainId, internId);
+            } else {
+              await getAllDocumentsReceived(parrainId, internId);
+            }
+          } else {
+            throw new Error('Error deleting document');
           }
-          
-          toast.success("Document deleted successfully", { autoClose: 2000 });
-         
-
-          // You can trigger a data refresh here if needed
-        if(ismine){
-            setInterval(async () => {    
-                await getAllDocumentsSended(parrainId,internId);
-                }, 1000);
-        }else{
-            setInterval(async () => {    
-                await getAllDocumentsReceived(internId,parrainId)
-                }, 1000);
-        }
-         
-
         } catch (error) {
-          console.error('Error deleting intern:', error);
-          toast.error("Error deleting intern", { autoClose: 2000 });
-
+          console.error('Error deleting document:', error);
+          toast.error("Error deleting document", { autoClose: 2000 });
         }
-    }
-
+      };
 
   
 
@@ -318,7 +290,7 @@ const handleDelete = () => {
                                 <td className="px-3.5 py-2.5 border-y border-transparent">
                                     <div className="flex items-center h-full">
                                         <input
-                                            id={`Checkbox${item._id}`}
+                                            id={`Checkbox${item.id}`}
                                             className="size-4 bg-white border border-slate-200 checked:bg-none dark:bg-zink-700 dark:border-zink-500 rounded-sm appearance-none arrow-none relative after:absolute after:content-['\eb7b'] after:top-0 after:left-0 after:font-remix after:leading-none after:opacity-0 checked:after:opacity-100 after:text-custom-500 checked:border-custom-500 dark:after:text-custom-500 dark:checked:border-custom-800"
                                             type="checkbox"
                                             value=""
@@ -341,7 +313,7 @@ const handleDelete = () => {
                                             <Eye className="size-3"></Eye>
                                         </a>
                       
-                                        <a onClick={() => handleDocDeletion(item._id, true)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
+                                        <a onClick={() => handleDocDeletion(item.id, true)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
                                             <Trash2 className="size-3"></Trash2>
                                         </a>
 
@@ -387,7 +359,7 @@ const handleDelete = () => {
                                 <td className="px-3.5 py-2.5 border-y border-transparent">
                                     <div className="flex items-center h-full">
                                         <input
-                                            id={`Checkbox${item._id}`}
+                                            id={`Checkbox${item.id}`}
                                             className="size-4 bg-white border border-slate-200 checked:bg-none dark:bg-zink-700 dark:border-zink-500 rounded-sm appearance-none arrow-none relative after:absolute after:content-['\eb7b'] after:top-0 after:left-0 after:font-remix after:leading-none after:opacity-0 checked:after:opacity-100 after:text-custom-500 checked:border-custom-500 dark:after:text-custom-500 dark:checked:border-custom-800"
                                             type="checkbox"
                                             value=""
@@ -410,7 +382,7 @@ const handleDelete = () => {
                                             <Eye className="size-3"></Eye>
                                         </a>
                       
-                                        <a onClick={() => handleDocDeletion(item._id, false)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
+                                        <a onClick={() => handleDocDeletion(item.id, false)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
                                             <Trash2 className="size-3"></Trash2>
                                         </a>
 
@@ -459,6 +431,20 @@ const handleDelete = () => {
                                 ) : null}
                             </div>
                            
+                            
+                            <div className="xl:col-span-12">
+                                <label htmlFor="documentType" className="inline-block mb-2 text-base font-medium">Document Type</label>
+                                <select id="documentType" name="documentType" className="form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200" 
+                                onChange={validation.handleChange} value={validation.values.documentType || ""}>
+                                    <option value="" disabled>Select document type</option>
+                                    <option value="CV">CV</option>
+                                    <option value="Autre">Autre</option>
+                                </select>
+                                {validation.touched.documentType && validation.errors.documentType ? (
+                                    <p className="text-red-400">{validation.errors.documentType}</p>) : null}
+                            </div>
+
+
                             <div className="xl:col-span-12">
                                 {/* file upload */}
                                 

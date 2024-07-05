@@ -101,7 +101,7 @@ const Chat = () => {
       console.error("Error fetching chats:", error);
     }
   };
-
+  
   // Create a message
   const createMessage = async (chatId: any, senderId: any, text: any) => {
     try {
@@ -232,7 +232,7 @@ const Chat = () => {
     setChat_Box_Username(intern.fname);
     setChat_Box_Image(intern.img);
     setChat_Box_Desiganation(intern.speciality);
-    setCurrentRoomId(item._id);
+    setCurrentRoomId(item.id);
     setCurrentIntern(intern);
     setIsBold(false);
 

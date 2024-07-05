@@ -1,45 +1,44 @@
-const mongoose = require('mongoose');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const ParrainSchema = new mongoose.Schema({
+const Parrain = sequelize.define('Parrain', {
     parrainId: {
-        type: String,
-        unique:true,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
     },
     fname: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
     lname: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
     email: {
-        type: String,
-        required: [true, 'Please provide your email'],
+        type: DataTypes.STRING,
+        allowNull: false,
         unique: true,
+        validate: {
+            isEmail: true
+        }
     },
     password: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        allowNull: false
     },
-    phone:{
-        type: String,
-        required: true
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
-
-    service:{
-        type: String,
-        required: true
+    service: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
+    speciality: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
 
-    speciality:{
-        type: String,
-        required: true
-    },
-})
-
-
-
-const Parrain = mongoose.model('Parrain', ParrainSchema);
 module.exports = Parrain;

@@ -1,37 +1,48 @@
-const mongoose = require('mongoose');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-// Define schema for Tache
-const tacheSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    statut: {
-        type: String,
-        enum: ['todo','enCours', 'termine'],
-        default: 'todo'
-    },
-    internId: {
-        type: String,
-        ref: 'Stagiaire',
-        required: true
-    },
-    dueDate: {
-        type: Date,
-        required: true
-    },
-    completionPercentage:{
-        type: Number,
-        default: 0
-    }
-    // Add any other fields as needed
-}, { timestamps: true }); // Automatic timestamps for createdAt and updatedAt
 
-// Create Tache model
-const Tache = mongoose.model('Task', tacheSchema);
+// Define the Tache (Task) model
+const Tache = sequelize.define('Task', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  statut: {
+    type: DataTypes.ENUM('todo', 'enCours', 'termine'),
+    defaultValue: 'todo',
+  },
+  internId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: 'stagiaires', // Assumes you have a 'Stagiaire' model/table
+      key: 'internId',
+    },
+  },
+  dueDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  completionPercentage: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+}, {
+  timestamps: true,
+});
 
 module.exports = Tache;
+
+// Optionally, sync the model with the database
+sequelize.sync()
+  .then(() => {
+    console.log('Tache table has been created.');
+  })
+  .catch(error => {
+    console.error('Error creating Tache table:', error);
+  });

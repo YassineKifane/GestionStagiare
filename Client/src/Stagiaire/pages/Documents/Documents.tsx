@@ -14,7 +14,7 @@ import getToken from "helpers/jwt-token-access/tokenAccess";
 
 import {BASE_DOC_URL, ADD_DOCUMENT, DELETE_DOCUMENT} from "services/documentsAPIs/documentsAPIs"
 
-interface FileItem { _id: string; fileType: string; fileName: string; fileSize: string; createdAt: string; status: string; url:string }
+interface FileItem { id: string; fileType: string; fileName: string; fileSize: string; createdAt: string; status: string; url:string }
 
 
 // parrainId, internId, documents, getAllDocumentsByReceiverId, setDocuments, docsReceived, setDocsReceived
@@ -354,7 +354,7 @@ const handleDelete = () => {
                                 <td className="px-3.5 py-2.5 border-y border-transparent">
                                     <div className="flex items-center h-full">
                                         <input
-                                            id={`Checkbox${item._id}`}
+                                            id={`Checkbox${item.id}`}
                                             className="size-4 bg-white border border-slate-200 checked:bg-none dark:bg-zink-700 dark:border-zink-500 rounded-sm appearance-none arrow-none relative after:absolute after:content-['\eb7b'] after:top-0 after:left-0 after:font-remix after:leading-none after:opacity-0 checked:after:opacity-100 after:text-custom-500 checked:border-custom-500 dark:after:text-custom-500 dark:checked:border-custom-800"
                                             type="checkbox"
                                             value=""
@@ -377,7 +377,7 @@ const handleDelete = () => {
                                             <Eye className="size-3"></Eye>
                                         </a>
                       
-                                        <a onClick={() => handleDocDeletion(item._id)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
+                                        <a onClick={() => handleDocDeletion(item.id)} className="flex items-center justify-center size-8 transition-all duration-150 ease-linear rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-zink-600 dark:hover:bg-zink-500">
                                             <Trash2 className="size-3"></Trash2>
                                         </a>
 
@@ -421,7 +421,7 @@ const handleDelete = () => {
                                 <td className="px-3.5 py-2.5 border-y border-transparent">
                                     <div className="flex items-center h-full">
                                         <input
-                                            id={`Checkbox${item._id}`}
+                                            id={`Checkbox${item.id}`}
                                             className="size-4 bg-white border border-slate-200 checked:bg-none dark:bg-zink-700 dark:border-zink-500 rounded-sm appearance-none arrow-none relative after:absolute after:content-['\eb7b'] after:top-0 after:left-0 after:font-remix after:leading-none after:opacity-0 checked:after:opacity-100 after:text-custom-500 checked:border-custom-500 dark:after:text-custom-500 dark:checked:border-custom-800"
                                             type="checkbox"
                                             value=""

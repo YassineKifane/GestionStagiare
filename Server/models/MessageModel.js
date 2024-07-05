@@ -1,22 +1,29 @@
-const mongoose = require("mongoose");
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-const MessageSchema = new mongoose.Schema(
-  {
-    chatId: {
-      type: String,
-    },
-    senderId: {
-      type: String,
-    },
-    text: {
-      type: String,
-    },
+
+// Define the Message model
+const Message = sequelize.define('Message', {
+  chatId: {
+    type: DataTypes.STRING
   },
-  { 
-    timestamps: true
-}
-)
+  senderId: {
+    type: DataTypes.STRING
+  },
+  text: {
+    type: DataTypes.STRING
+  },
+}, {
+  timestamps: true,
+});
 
-const MessageModel = mongoose.model("Message", MessageSchema);
+module.exports = Message;
 
-module.exports = MessageModel;
+// Optionally, sync the model with the database
+sequelize.sync()
+  .then(() => {
+    console.log('Message table has been created.');
+  })
+  .catch(error => {
+    console.error('Error creating Message table:', error);
+  });
